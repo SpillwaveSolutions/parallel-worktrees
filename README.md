@@ -1,6 +1,10 @@
-# Parallel Worktrees Skill
+# Parallel Worktrees Skill for Claude Code
 
-Run multiple Claude Code agents simultaneously across git worktrees—transform a single developer into a team of AI engineers.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Claude Code](https://img.shields.io/badge/Claude-Code-5A67D8)](https://claude.ai/code)
+[![Skilz Marketplace](https://img.shields.io/badge/Skilz-Marketplace-00C7B7)](https://skillzwave.ai/skill/SpillwaveSolutions__parallel-worktrees__parallel-worktrees__SKILL/)
+
+Run multiple Claude Code agents simultaneously across git worktrees - transform a single developer into a team of AI engineers.
 
 ## Overview
 
@@ -10,9 +14,58 @@ This skill enables parallel AI-assisted development by combining **git worktrees
 1. **Interactive Parallel**: Multiple terminal sessions with Claude in separate worktrees
 2. **Background Orchestration**: Main agent delegates to background agents in worktrees, continues working, syncs results when complete
 
+## Features
+
+- **Parallel Development** - Spawn multiple Claude agents working simultaneously on the same task
+- **Competitive Solutions** - Leverage LLM non-determinism to get N different implementations
+- **Background Orchestration** - Delegate work to background agents while continuing main task
+- **Easy Merging** - Compare implementations and merge the best solution
+- **Resource Efficiency** - Worktrees share `.git` database, saving disk space
+- **Workflow Scripts** - Ready-to-use scripts for spawning, syncing, and cleanup
+
 ## Installation
 
-This skill is installed at `~/.claude/skills/parallel-worktrees/`. Claude Code automatically loads it when triggered by keywords like:
+### Installing with Skilz (Recommended)
+
+The easiest way to install this skill is using the [Skilz Universal Installer](https://github.com/SpillwaveSolutions/skilz):
+
+```bash
+# Install Skilz (one-time setup)
+curl -fsSL https://raw.githubusercontent.com/SpillwaveSolutions/skilz/main/install.sh | bash
+
+# Install this skill
+skilz install SpillwaveSolutions_parallel-worktrees/parallel-worktrees
+```
+
+View on the Skilz Marketplace: [parallel-worktrees](https://skillzwave.ai/skill/SpillwaveSolutions__parallel-worktrees__parallel-worktrees__SKILL/)
+
+### Manual Installation
+
+Clone directly into your Claude Code skills directory:
+
+```bash
+# Navigate to your skills directory
+cd ~/.claude/skills
+
+# Clone the repository
+git clone https://github.com/SpillwaveSolutions/parallel-worktrees.git
+```
+
+### Verify Installation
+
+After installation, verify the skill is available:
+
+```bash
+# List installed skills
+ls ~/.claude/skills/parallel-worktrees
+
+# Or ask Claude Code
+# "List my installed skills"
+```
+
+## Trigger Phrases
+
+Claude Code automatically activates this skill when you mention:
 - "parallel agents" / "background agents"
 - "worktrees" / "agent coordination"
 - "subagents" / "parallel tasks"
@@ -70,6 +123,19 @@ git merge user-dashboard-2
 ./scripts/cleanup-worktrees.sh user-dashboard --delete-branches
 ```
 
+## Workflow Patterns
+
+| Pattern | Description | Use Case |
+|---------|-------------|----------|
+| **Competitive Implementation** | N agents on same task, pick best | UI components, algorithms |
+| **Divide and Conquer** | Split feature into parallel tracks | Large features with independent parts |
+| **Redundant Safety Net** | Multiple agents as backup | Critical/risky changes |
+| **Exploration Sprint** | Each agent tries different approach | Architecture decisions (WebSocket vs SSE vs polling) |
+| **Test-First Parallel** | One writes tests, others implement | TDD workflows |
+| **Review Pipeline** | Separate implementation and review | Fresh-eyes code review |
+
+See [references/workflow-patterns.md](references/workflow-patterns.md) for detailed examples.
+
 ## Scripts
 
 ### `spawn-parallel.sh`
@@ -125,19 +191,6 @@ Reviews and merges completed worktree work back to main.
 # Interactively review and merge
 ./scripts/sync-worktrees.sh --interactive
 ```
-
-## Workflow Patterns
-
-| Pattern | Description | Use Case |
-|---------|-------------|----------|
-| **Competitive Implementation** | N agents on same task, pick best | UI components, algorithms |
-| **Divide and Conquer** | Split feature into parallel tracks | Large features with independent parts |
-| **Redundant Safety Net** | Multiple agents as backup | Critical/risky changes |
-| **Exploration Sprint** | Each agent tries different approach | Architecture decisions (WebSocket vs SSE vs polling) |
-| **Test-First Parallel** | One writes tests, others implement | TDD workflows |
-| **Review Pipeline** | Separate implementation and review | Fresh-eyes code review |
-
-See [references/workflow-patterns.md](references/workflow-patterns.md) for detailed examples.
 
 ## Background Agent Orchestration
 
@@ -277,6 +330,26 @@ git worktree prune
 | `/compact` | Compress context |
 | `Shift+Tab` | Toggle Plan Mode |
 
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
 ## License
 
-This skill is provided as-is for use with Claude Code.
+This skill is provided under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Support
+
+For issues, questions, or suggestions:
+- Open an issue on [GitHub](https://github.com/SpillwaveSolutions/parallel-worktrees/issues)
+- Consult the documentation in `SKILL.md` and `references/`
+
+---
+
+**Made with care for parallel AI development**
