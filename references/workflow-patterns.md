@@ -41,6 +41,12 @@ git checkout main
 git merge user-dashboard-2  # Assuming #2 was best
 ```
 
+### Verification Checklist
+- [ ] All worktrees have RESULTS.md with implementation summary
+- [ ] Tests pass in selected implementation: `npm test`
+- [ ] No merge conflicts: `git status` shows clean state
+- [ ] Build succeeds: `npm run build`
+
 ## Pattern 2: Divide and Conquer
 
 Split large features into independent parallel tracks.
@@ -67,6 +73,11 @@ git fetch origin
 git rebase origin/tenant-1  # Get schema changes
 ```
 
+### Verification Checklist
+- [ ] Schema migrations run successfully: `npm run migrate`
+- [ ] Each stage rebased on dependencies: `git log --oneline -5`
+- [ ] Integration tests pass after merge: `npm run test:integration`
+
 ## Pattern 3: Redundant Safety Net
 
 For critical/risky changes, run multiple agents as backup.
@@ -82,17 +93,22 @@ For critical/risky changes, run multiple agents as backup.
 ./scripts/spawn-parallel.sh payment-refactor 3
 ```
 
-Each Claude instance works independently. If one fails or produces bugs, you have backups.
+Each Claude instance works independently. If one fails or produces bugs, the other instances provide backups.
 
 ### Validation
 ```bash
 # Run tests in each worktree
 for i in 1 2 3; do
-  (cd .worktrees/payment-refactor-$i && npm test) 
+  (cd .worktrees/payment-refactor-$i && npm test)
 done
 
 # Compare test results
 ```
+
+### Verification Checklist
+- [ ] At least one implementation passes all tests
+- [ ] Selected implementation has no regressions: `npm run test:e2e`
+- [ ] Code review completed on critical paths
 
 ## Pattern 4: Exploration Sprint
 
@@ -303,7 +319,7 @@ Work in `.worktrees/feature-[component]/`
 
 ### Scope
 - [Component-specific requirements]
-- Do NOT modify files outside your component
+- Do NOT modify files outside the designated component
 
 ### Dependencies
 - Database schema will be in feature-database branch
@@ -383,7 +399,7 @@ while true; do
           echo "Retrying $task (attempt $((retries + 1)))"
           # Update retry count
           jq ".retries = $((retries + 1)) | .status = \"RUNNING\"" "$status_file" > tmp && mv tmp "$status_file"
-          # Re-launch agent (implementation depends on your setup)
+          # Re-launch agent (implementation depends on the specific setup)
         else
           echo "Max retries reached for $task"
         fi

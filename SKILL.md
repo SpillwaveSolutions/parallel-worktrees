@@ -5,7 +5,20 @@ description: Parallel development using git worktrees with Claude Code subagents
 
 # Parallel Worktrees with Claude Code Subagents
 
-Run multiple Claude Code agents simultaneously across git worktrees to transform a single developer into a team of AI engineers. This exploits LLM non-determinism as a feature—running N parallel agents gives multiple valid solutions to choose from.
+Run multiple Claude Code agents simultaneously across git worktrees to transform a single developer into a team of AI engineers. LLM non-determinism becomes an advantage: running N parallel agents produces multiple valid solutions to choose from.
+
+## Table of Contents
+
+- [Core Workflow](#core-workflow)
+- [Git Worktrees Essentials](#git-worktrees-essentials)
+- [Claude Code Subagents](#claude-code-subagents)
+- [Spawning Parallel Subagents](#spawning-parallel-agents)
+- [Workflow Patterns](#workflow-patterns)
+- [Dependency Management](#dependency-management)
+- [Common Pitfalls](#common-pitfalls)
+- [When to Use Parallel vs Sequential](#when-to-use-parallel-vs-sequential)
+- [Resource Considerations](#resource-considerations)
+- [Background Subagents with Worktree Coordination](#background-agents-with-worktree-coordination)
 
 ## Core Workflow
 
@@ -83,7 +96,7 @@ tools: Read, Grep, Glob, Bash
 model: inherit
 ---
 
-You are a senior code reviewer. When invoked:
+Acts as a senior code reviewer. When invoked:
 1. Run git diff to see changes
 2. Focus on modified files
 3. Prioritize: Critical → Warnings → Suggestions
@@ -110,7 +123,7 @@ cd ../project-refactor && claude
 
 ```bash
 #!/bin/bash
-# spawn-parallel.sh <feature-name> <num-agents>
+# spawn-parallel.sh FEATURE_NAME NUM_AGENTS
 FEATURE=$1
 NUM=${2:-3}
 
@@ -161,17 +174,12 @@ Create 3-4 worktrees for the same feature, give each identical instructions, com
 
 ## Essential CLI Reference
 
-| Command | Purpose |
-|---------|---------|
-| `claude` | Start interactive session |
-| `claude -p "prompt"` | Headless mode for automation |
-| `claude --continue` | Resume most recent conversation |
-| `claude --dangerously-skip-permissions` | Skip prompts (containers only) |
-| `Shift+Tab` | Toggle Plan Mode (read-only) |
-| `/clear` | Reset context window |
-| `/agents` | Manage subagents |
-| `/compact` | Compress context preserving summary |
-| `/init` | Orient Claude with codebase |
+See [references/cli-reference.md](references/cli-reference.md) for the complete CLI command reference.
+
+Key commands:
+- `claude` - Start interactive session
+- `/clear` - Reset context window
+- `/agents` - Manage subagents
 
 ## Dependency Management
 
@@ -270,7 +278,7 @@ git worktree add .worktrees/task-ui -b task-ui main
 
 ### Status File Convention
 
-Background agents write status to `.agent-status/<task-name>.json`:
+Background agents write status to `.agent-status/TASK_NAME.json`:
 
 ```json
 {
@@ -301,7 +309,7 @@ Work in the worktree at `.worktrees/[task-name]/`
 1. Write a summary to `RESULTS.md` in the worktree
 2. Commit all changes: `git add -A && git commit -m "[task-name]: [summary]"`
 3. Update status file: Write to `../.agent-status/[task-name].json`:
-   {"status": "COMPLETE", "summary": "[what you accomplished]"}
+   {"status": "COMPLETE", "summary": "[summary of accomplishments]"}
 
 ### On Failure
 1. Document the issue in `RESULTS.md`
